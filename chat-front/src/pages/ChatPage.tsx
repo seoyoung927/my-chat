@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 import { chatRoomsState } from "../recoil/chatRooms";
 import { useRecoilValue } from "recoil";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { nickNameState } from "../recoil/nickName";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import styled from "styled-components";
-import { nickNameState } from "../recoil/nickName";
 
 const Container = styled.div`
     width: 100vw;
@@ -64,26 +64,15 @@ function ChatPage(){
     const [contents, setContents] = useState<IMessage[]>([]);
     const userName = useRecoilValue(nickNameState);
     const [message, setMessage] = useState("");
-    
+
     const {roomId} = useParams();
     //recoil
     const chatRooms = useRecoilValue(chatRoomsState);
     const room = chatRooms.filter(room=>room.id===Number(roomId))[0];
     
-    
     const addMessage = (message:IMessage) => {
         setContents(prev=>[...prev,message]);
     }
-
-    useEffect(()=>{
-        stompClient.connect({},()=>{
-            stompClient.subscribe(`/topic/${room.roomName}`,(data)=>{
-                console.log(data);
-                const newMessage : IMessage = JSON.parse(data.body) as IMessage;
-                addMessage(newMessage);
-            })
-        })
-    },[]);
     
     const onSubmit = (event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -91,6 +80,18 @@ function ChatPage(){
         stompClient.send(`/hello/${room.roomName}`,{},JSON.stringify(newMessage));
         setMessage("");
     }
+
+  
+    useEffect(()=>{
+        stompClient.connect({},()=>{
+            stompClient.subscribe(`/topic/chat/${room.roomName}`,(data)=>{
+                console.log(data);
+                const newMessage : IMessage = JSON.parse(data.body) as IMessage;
+                addMessage(newMessage);
+            })
+        });
+    },[]);
+    
 
     return (
         <Container>

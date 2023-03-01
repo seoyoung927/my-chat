@@ -97,7 +97,13 @@ function ChatsPage(){
                             navigate(`${process.env.PUBLIC_URL}/chat/${room.id}`);
                         }}
                         className="roomBtn">
-                        입장</button>
+                        입장-채팅</button>
+                    <button
+                        onClick={()=>{
+                            navigate(`${process.env.PUBLIC_URL}/video/${room.id}`);
+                        }}
+                        className="roomBtn">
+                        입장-비디오</button>
                 </div>)}
             </div>
         </Container>

@@ -3,6 +3,7 @@ import App from "./App";
 import ChatPage from "./pages/ChatPage";
 import ChatsPage from "./pages/ChatsPage";
 import LoginPage from "./pages/LoginPage";
+import VideoPage from "./pages/VideoPage";
 
 
 const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
             {
                 path: "chat/:roomId",
                 element: <ChatPage />
+            },
+            {
+                path: "video/:roomId",
+                element: <VideoPage />
             }
             // {
             //     path: "",

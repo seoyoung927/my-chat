@@ -16,6 +16,8 @@ function VideoPage() {
     const stompClient: Stomp.Client = Stomp.over(sockJS);
     stompClient.debug = () => { };
     //////////////////////////////////////////////////////////////
+    const [mute, setMute] = useState(true);
+    const [show, setShow] = useState(true);
     const [streams, setStreams] = useState<any[]>([]);
     const { roomId } = useParams();
     //recoil
@@ -130,6 +132,24 @@ function VideoPage() {
         }
     }
     
+    function handleMute() {
+        setMute(cur=>!cur);
+        streams.forEach((stream:any)=>{
+            stream.getAudioTracks().forEach((track:any)=>{
+                track.enabled=!track.enabled
+            })
+        });
+    }
+
+    function handleShow() {
+        setShow(cur=>!cur);
+        streams.forEach((stream:any)=>{
+            stream.getVideoTracks().forEach((track:any)=>{
+                track.enabled=!track.enabled
+            })
+        });
+    }
+
     return (
         <Container>
             <div className="wrapper">
@@ -138,6 +158,9 @@ function VideoPage() {
                     className="Face"
                     autoPlay
                     playsInline />
+
+                <button onClick={handleMute}>{mute ? "음소거" : "음소거 해제"}</button>
+                <button onClick={handleShow}>{show ? "화면송출 중지" : "화면송출"}</button>
             </div>
             <div className="wrapper" id="peer">
                 <video

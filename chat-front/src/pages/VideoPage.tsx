@@ -33,7 +33,6 @@ function VideoPage() {
     const [myPeerConnection,setMyPeerConnection] = useState<any>(new RTCPeerConnection());
     //let myPeerConnection: any;
     //let myStream: any;
-    
     async function getMedia(deviceId?: string) {
         const initialConstrains = {
             audio: true,
@@ -59,7 +58,7 @@ function VideoPage() {
 
     async function initCall() {
         const result = await getMedia();
-        makeConnection(result);
+        makeConnection(result); 
         setMyStream(result);
         await stompClient.send(`/welcome/${room.roomName}`, {}, JSON.stringify({"id":userName}));
     }
@@ -107,7 +106,7 @@ function VideoPage() {
 
     // RTC Code
     function makeConnection(myStream:any) {
-        //let myPeerConnection = new RTCPeerConnection();
+        //myPeerConnection = new RTCPeerConnection();
         myPeerConnection.addEventListener("icecandidate", handleIce);
         myPeerConnection.addEventListener("track", handleAddStream);
         myPeerConnection.addEventListener("connectionstatechange", handleChange);
@@ -249,6 +248,7 @@ function VideoPage() {
                     autoPlay
                     playsInline />
             </div>
+
         </Container>
     )
 }

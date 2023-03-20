@@ -48,17 +48,17 @@ const Container = styled.div`
     }
 `;
 
-function ChatsPage(){
+function ChatsPage() {
     const nickName = useRecoilValue(nickNameState);
     const [newRoom, setNewRoom] = useState("");
     const navigate = useNavigate();
     //recoil
     const [chatRooms, setChatRooms] = useRecoilState(chatRoomsState);
 
-    const onAddRoom = (event:React.FormEvent<HTMLFormElement>) => {
+    const onAddRoom = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const length = chatRooms.length;
-        setChatRooms(prev=>[...prev,{
+        setChatRooms(prev => [...prev, {
             id: length,
             roomName: newRoom,
         }]);
@@ -73,16 +73,16 @@ function ChatsPage(){
                 {nickName}님 안녕하세요.
             </h3>
             <form
-                onSubmit={onAddRoom} 
+                onSubmit={onAddRoom}
                 className="inputWrapper">
-                <input 
+                <input
                     type="text"
                     className="inputBox"
                     placeholder="채팅방이름을 입력해주세요."
                     value={newRoom}
-                    onChange={(e)=>setNewRoom(e.currentTarget.value)}
+                    onChange={(e) => setNewRoom(e.currentTarget.value)}
                 />
-                <button 
+                <button
                     className="inputBtn"
                     type="submit">
                     검색
@@ -90,20 +90,26 @@ function ChatsPage(){
             </form>
             <div className="chatsWrapper">
                 <h3 className="title-2">채팅방목록</h3>
-                {chatRooms.map((room, index)=><div key={index} className="chatRoom">
+                {chatRooms.map((room, index) => <div key={index} className="chatRoom">
                     {room.roomName}
                     <button
-                        onClick={()=>{
+                        onClick={() => {
                             navigate(`${process.env.PUBLIC_URL}/chat/${room.id}`);
                         }}
                         className="roomBtn">
                         입장-채팅</button>
                     <button
-                        onClick={()=>{
+                        onClick={() => {
                             navigate(`${process.env.PUBLIC_URL}/video/${room.id}`);
                         }}
                         className="roomBtn">
                         입장-비디오</button>
+                    <button
+                        onClick={() => {
+                            navigate(`${process.env.PUBLIC_URL}/video2/${room.id}`);
+                        }}
+                        className="roomBtn">
+                        입장-비디오2</button>
                 </div>)}
             </div>
         </Container>
